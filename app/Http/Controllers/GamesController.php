@@ -35,7 +35,7 @@ class GamesController extends Controller
         // dump($popularGames);
 
         $recentlyReviewed = Http::withHeaders(config('services.igdb'))->withBody(
-            "fields name, cover.url, first_release_date, platforms.abbreviation, rating, slug,rating_count, summary;
+            "fields name, cover.url, first_release_date, platforms.abbreviation, total_rating_count,rating, slug,rating_count, summary;
             where platforms = (48,49,130,6)
             & (first_release_date >= {$before}
             & first_release_date < {$current}
@@ -49,7 +49,7 @@ class GamesController extends Controller
         // dump($recentlyReviewed);
 
         $mostAnticipated = Http::withHeaders(config('services.igdb'))->withBody(
-            "fields name, cover.url, first_release_date, platforms.abbreviation, rating, slug,rating_count, summary;
+            "fields name, cover.url, first_release_date, platforms.abbreviation,total_rating_count, rating, slug,rating_count, summary;
             where platforms = (48,49,130,6)
             & (first_release_date >= {$current}
             & first_release_date < {$afterFourMonths});
