@@ -15,6 +15,7 @@
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
+    @livewireStyles
 </head>
 
 <body class="bg-gray-900 text-white">
@@ -56,6 +57,7 @@
             Powered By <a href="#" class="underline hover:text-gray-400">IGDB API</a>
         </div>
     </footer>
+    @livewireScripts
 </body>
 
 </html>
