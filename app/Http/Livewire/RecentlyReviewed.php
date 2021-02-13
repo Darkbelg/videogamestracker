@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Illuminate\Support\Str;
+
 class RecentlyReviewed extends Component
 {
     public $recentlyReviewed = [];
@@ -33,6 +34,15 @@ class RecentlyReviewed extends Component
         });
 
         $this->recentlyReviewed = $this->formatForView($recentlyReviewedUnformatted);
+
+        collect($this->recentlyReviewed)->filter(function ($game) {
+            return $game['rating'];
+        })->each(function ($game) {
+            $this->emit('reviewGameWithRatingAdded', [
+                'slug' => 'review_' . $game['slug'],
+                'rating' => $game['rating'] / 100
+            ]);
+        });
     }
 
     public function render()
@@ -42,12 +52,12 @@ class RecentlyReviewed extends Component
 
     public function formatForView($games)
     {
-        return collect($games)->map(function($game){
+        return collect($games)->map(function ($game) {
             return collect($game)->merge([
-                'coverImageUrl' => Str::replaceFirst('thumb', 'cover_big',$game['cover']['url'] ),
+                'coverImageUrl' => Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']),
                 'platforms' => collect($game["platforms"])->pluck('abbreviation')->implode(', '),
-                'rating' => isset($game['rating']) ? round($game['rating']). '%' : null,
-                ]);
+                'rating' => isset($game['rating']) ? round($game['rating']) : null,
+            ]);
         });
     }
 }
